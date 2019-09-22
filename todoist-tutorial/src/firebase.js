@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 
 const firebaseConfig = firebase.initializeApp({
-  apiKey: "AIzaSyCUH8FrfwQ1skkmBskojySNTSZVkqEo5Jc",
+  apiKey: `${process.env.REACT_APP_apiKey}`,
   authDomain: "todoist-tutorial-fb4d4.firebaseapp.com",
   databaseURL: "https://todoist-tutorial-fb4d4.firebaseio.com",
   projectId: "todoist-tutorial-fb4d4",
