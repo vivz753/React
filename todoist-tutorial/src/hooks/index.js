@@ -3,25 +3,27 @@ import moment from 'moment';
 import { firebase } from '../firebase';
 import { collatedTasksExist } from '../helpers';
 
+const fbTasks = firebase.firestore().collection('tasks')
+const fbProjects = firebase.firestore().collection('projects')
+
 export const useTasks = selectedProject => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
 
   useEffect(() => {
-    let unsubscribe = firebase
-      .firestore()
-      .collection('tasks')
-      .where('userId', '==', 'TrxBQ6dw2i93VzUVUtnY');
+    let userTasks = fbTasks
+      // .where('userId', '==', 'TrxBQ6dw2i93VzUVUtnY');
 
-    unsubscribe = selectedProject && !collatedTasksExist(selectedProject) ?
-      (unsubscribe = unsubscribe.where('projectId', '==', selectedProject))
+
+    userTasks = selectedProject && !collatedTasksExist(selectedProject) ?
+      (userTasks = userTasks.where('projectId', '==', selectedProject))
       : selectedProject === 'TODAY'
-      ? (unsubscribe = unsubscribe.where('date', '==', moment().format('DD/MM/YYY')))
-      : selectedProject === 'INBOX' || selectedProject === 0
-      ? (unsubscribe = unsubscribe.where('date', '==', ''))
-      : unsubscribe;
+      ? (userTasks = userTasks.where('date', '==', moment().format('DD/MM/YYY')))
+      : selectedProject === 'INBOX'
+      ? (userTasks = userTasks.where('date', '==', ''))
+      : userTasks;
 
-      unsubscribe = unsubscribe.onSnapshot(snapshot => {
+      userTasks = userTasks.onSnapshot(snapshot => {
         const newTasks = snapshot.docs.map(task => ({
           id: task.id,
           ...task.data()
@@ -40,7 +42,7 @@ export const useTasks = selectedProject => {
         setArchivedTasks(newTasks.filter(task => task.archived !== false));
       });
 
-      return () => unsubscribe();
+      return () => userTasks();
   }, [selectedProject]);
   return { tasks, archivedTasks };
 };
@@ -49,9 +51,7 @@ export const useProjects = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    firebase
-      .firestore()
-      .collection('projects')
+    fbProjects
       .where('userId', '==', 'HcafYDT6NqkbwLPxqpsB')
       .orderBy('projectId')
       .get()
