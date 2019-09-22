@@ -12,13 +12,11 @@ export const Tasks = () => {
   
   let projectName = '';
 
-  console.log(tasks)
-
+  // if the project is not inbox, today, or next 7 days, search through projects list
   if (projects && selectedProject && !collatedTasksExist(selectedProject)) {
     projectName = getTitle(projects, selectedProject).name;
-    console.log(projectName)
   }
-
+  // else search through collated tasks list
   if (collatedTasksExist(selectedProject) && selectedProject) {
     projectName = getCollatedTitle(collatedTasks, selectedProject).name;
   }
@@ -26,6 +24,8 @@ export const Tasks = () => {
   useEffect(() => {
     document.title = `${projectName}: Todoist`
   })
+
+  console.log(tasks);
 
   return (
     <div className="tasks" data-testid="tasks">

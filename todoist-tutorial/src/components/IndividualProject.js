@@ -4,6 +4,7 @@ import { useProjectsValue, useSelectedProjectValue } from '../context'
 import { firebase } from '../firebase';
 
 export const IndividualProject = ({project}) => {
+  const [ active, setActive ] = useState();
   const [ showConfirm, setShowConfirm ] = useState(false);
   const { projects, setProjects } = useProjectsValue();
   const { setSelectedProject } = useSelectedProjectValue();
@@ -21,7 +22,20 @@ export const IndividualProject = ({project}) => {
   };
 
   return (
-    <>
+    <li
+      key={project.projectId}
+      data-doc-id={project.docId}
+      data-testid="project-action"
+      className={
+        active === project.projectId
+        ? 'active sidebar__project'
+        : 'sidebar__project'
+      }
+      onClick={() => {
+        setActive(project.projectId);
+        setSelectedProject(project.projectId);
+      }}
+    >
       <span className="sidebar__dot">•</span>
       <span className="sidebar__project-name">{project.name}</span>
       <span 
@@ -45,6 +59,6 @@ export const IndividualProject = ({project}) => {
           </div>
         )}
       </span>
-    </>
+    </li>
   )
 }
