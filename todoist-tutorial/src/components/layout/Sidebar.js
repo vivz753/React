@@ -7,6 +7,7 @@ import {
 import { useSelectedProjectValue } from '../../context/index';
 import { Projects } from '../Projects';
 import { CollatedProjects } from '../CollatedProjects';
+import { AddProject } from '../AddProject';
 
 export const Sidebar = () => {
   // const { setSelectedProject } = useSelectedProjectValue();
@@ -25,7 +26,7 @@ export const Sidebar = () => {
       <ul className="sidebar__projects">
         {showProjects && <Projects />}
       </ul>
-      {/* {showProjects && <AddProjects />} */}
+      {showProjects && <AddProject />}
     </div>
   )
 }
