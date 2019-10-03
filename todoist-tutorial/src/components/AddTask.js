@@ -34,9 +34,7 @@ export const AddTask = ({
     else if (projectId === 'NEXT_7') {
       collatedDate = moment().add(7, 'days').format('DD/MM/YYYY')
     }
-
-    console.log('collatedDate: ' + collatedDate)
-    console.log('taskDate: ' + taskDate)
+    
     return (
       taskName && 
       projectId && 
