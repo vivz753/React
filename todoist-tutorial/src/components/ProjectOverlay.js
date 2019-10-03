@@ -2,7 +2,8 @@ import React from 'react';
 import { useProjectsValue } from '../context';
 
 export const ProjectOverlay = ({
-  setProject, 
+  setProject,
+  // setSelectedProject, 
   showProjectOverlay, 
   setShowProjectOverlay
 }) => {
@@ -18,6 +19,7 @@ export const ProjectOverlay = ({
               data-testid="project-overlay-action"
               onClick={() => {
                 setProject(project.projectId);
+                // setSelectedProject(project.projectId);
                 setShowProjectOverlay(false);
               }}
             >

@@ -37,7 +37,9 @@ export const Tasks = () => {
           </li>
         ))}
       </ul>
-      <AddTask />
+      <AddTask 
+        showAddTaskMain={true}
+      />
     </div>
   )
 }

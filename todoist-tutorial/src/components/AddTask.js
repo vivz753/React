@@ -9,8 +9,7 @@ import { TaskDate } from './TaskDate';
 const fbTasks = firebase.firestore().collection('tasks');
 
 export const AddTask = ({
-  showAddTaskMain = true,
-  shouldShowMain = false,
+  showAddTaskMain,
   showQuickAddTask,
   setShowQuickAddTask
 }) => {
@@ -18,11 +17,11 @@ export const AddTask = ({
   const [taskDate, setTaskDate] = useState('');
   const [showTaskDate, setShowTaskDate] = useState(false);
   const [project, setProject] = useState('');
-  const [showMain, setShowMain] = useState(shouldShowMain);
+  const [showMain, setShowMain] = useState(false);
   const [showProjectOverlay, setShowProjectOverlay] = useState(false);
   
 
-  const { selectedProject } = useSelectedProjectValue();
+  const { selectedProject, setSelectedProject } = useSelectedProjectValue();
 
   const addTask = () => {
     const projectId = project || selectedProject;
@@ -46,10 +45,18 @@ export const AddTask = ({
           date: collatedDate || taskDate,
         })
         .then(()=> {
+          // after adding task to firebase,
+          // clear task name, project overlay selection
+          // toggle display for regular add task module
+          // toggle display for project overlay and task date
+          // toggle display for quick add task module
+          setShowQuickAddTask && setShowQuickAddTask(false);
+          setShowMain(false);
           setTaskName('');
           setProject('');
-          setShowMain('');
           setShowProjectOverlay(false);
+          setShowTaskDate(false);
+
         })
     );
   };
@@ -59,13 +66,13 @@ export const AddTask = ({
       className={showQuickAddTask ? 'add-task add-task__overlay' : 'add-task'}
       data-testid="add-task-comp"
     >
+      {/* Regular Add Task Prompt */}
       {showAddTaskMain && (
         <div
         className="add-task__shallow"
         data-testid="show-main-action"
         onClick={()=> setShowMain(!showMain)}
         >
-      
           <span className="add-task__plus">+</span>
           <span className="add-task__text">Add Task</span>
         </div>
@@ -73,16 +80,18 @@ export const AddTask = ({
 
       {(showMain || showQuickAddTask) && (
         <div className="add-task__main" data-testid="add-task-main">
-          {showQuickAddTask && (
+          {/* Quick Add Task Module Header and X cancel button */}
+          {
+            showQuickAddTask && (
             <div data-testid="quick-add-task">
               <h2 className="header">Quick Add Task</h2>
               <span
                 className="add-task__cancel-x"
                 data-testid="add-task-quick-cancel"
                 onClick={() => {
-                  setShowMain(false);
-                  setShowProjectOverlay(false);
                   setShowQuickAddTask(false)
+                  setShowProjectOverlay(false);
+                  setShowTaskDate(false);
                 }}
               >
                 X
@@ -111,13 +120,12 @@ export const AddTask = ({
             className="add-task__submit"
             data-testid="add-task"
             onClick={()=> {
-              addTask();
-              setShowMain(false);
-              setShowProjectOverlay(false);
+              addTask()
             }}
           >
             Add Task
           </button>
+          {/* Regular Add Task Module Cancel button */}
           {!showQuickAddTask && (
             <span
               className="add-task__cancel"
@@ -125,6 +133,7 @@ export const AddTask = ({
               onClick={()=> {
                 setShowMain(false);
                 setShowProjectOverlay(false);
+                setShowTaskDate(false);
               }}
             >
               Cancel
