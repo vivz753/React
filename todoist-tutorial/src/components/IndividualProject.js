@@ -4,10 +4,10 @@ import { useProjectsValue, useSelectedProjectValue } from '../context'
 import { firebase } from '../firebase';
 
 export const IndividualProject = ({project}) => {
-  const [ active, setActive ] = useState();
+  // const [ active, setActive ] = useState();
   const [ showConfirm, setShowConfirm ] = useState(false);
   const { projects, setProjects } = useProjectsValue();
-  const { setSelectedProject } = useSelectedProjectValue();
+  const { selectedProject, setSelectedProject } = useSelectedProjectValue();
 
   const deleteProject = docId => {
     firebase
@@ -27,12 +27,12 @@ export const IndividualProject = ({project}) => {
       data-doc-id={project.docId}
       data-testid="project-action"
       className={
-        active === project.projectId
+        selectedProject === project.projectId
         ? 'active sidebar__project'
         : 'sidebar__project'
       }
       onClick={() => {
-        setActive(project.projectId);
+        // setActive(project.projectId);
         setSelectedProject(project.projectId);
       }}
     >
