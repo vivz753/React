@@ -18,6 +18,7 @@ export const CollatedProjects = (CollatedProjects) => {
       {collatedTasks.map(task => {
         return (
         <li 
+        key={task.key}
         data-testid={task.key}
         className={active === task.key ? 'active' : undefined}
         onClick={() => {
