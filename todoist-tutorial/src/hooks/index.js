@@ -14,12 +14,15 @@ export const useTasks = selectedProject => {
     let userTasks = fbTasks
       // .where('userId', '==', 'TrxBQ6dw2i93VzUVUtnY');
 
-
+    // get the firebase tasks where project is the selected project
+    // if selected project is today, get the tasks where date is today
+    // if selected project is inbox, get the tasks where there is no date
+    // otherwise get all the tasks
     userTasks = 
       selectedProject && !collatedTasksExist(selectedProject) ?
       (userTasks = userTasks.where('projectId', '==', selectedProject))
       : selectedProject === 'TODAY'
-      ? (userTasks = userTasks.where('date', '==', moment().format('DD/MM/YYY')))
+      ? (userTasks = userTasks.where('date', '==', moment().format('DD/MM/YYYY')))
       : selectedProject === 'INBOX'
       ? (userTasks = userTasks.where('date', '==', ''))
       : userTasks;
@@ -31,6 +34,7 @@ export const useTasks = selectedProject => {
         }));
 
         setTasks(
+          // if selected project is next 7, only show the tasks where the date is from today to the next 7 days
           selectedProject === 'NEXT_7'
             ? newTasks.filter(
               task=> 
