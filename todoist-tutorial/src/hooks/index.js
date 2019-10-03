@@ -15,7 +15,8 @@ export const useTasks = selectedProject => {
       // .where('userId', '==', 'TrxBQ6dw2i93VzUVUtnY');
 
 
-    userTasks = selectedProject && !collatedTasksExist(selectedProject) ?
+    userTasks = 
+      selectedProject && !collatedTasksExist(selectedProject) ?
       (userTasks = userTasks.where('projectId', '==', selectedProject))
       : selectedProject === 'TODAY'
       ? (userTasks = userTasks.where('date', '==', moment().format('DD/MM/YYY')))
