@@ -9,10 +9,6 @@ export const CollatedProjects = (CollatedProjects) => {
   const [ active, setActive ] = useState('INBOX');
   const { setSelectedProject } = useSelectedProjectValue();
 
-  collatedTasks.forEach(task => {
-    console.log('task key + name: ' + task.key + " " + task.name)
-  })
-
   return (
     <ul>
       {collatedTasks.map(task => {
