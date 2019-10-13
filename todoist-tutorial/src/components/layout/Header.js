@@ -16,18 +16,35 @@ export const Header = ({darkMode, setDarkMode}) => {
           <li 
             data-testid="quick-add-task-action" 
             className="settings__add"
-            onClick={()=> {
-              setShowQuickAddTask(true); 
-            }}
           >
-            +
+            <div
+              aria-label="Quick add task"
+              tabIndex={0}
+              onClick={()=> {
+                setShowQuickAddTask(true); 
+              }}
+              onKeyDown={()=> {
+                setShowQuickAddTask(true); 
+              }}
+            >
+              +
+            </div>
           </li>
           <li 
             data-testid="dark-mode-action" 
             className="settings__darkmode"
-            onClick={()=> setDarkMode(!darkMode)}
           >
-            <FaPizzaSlice/>
+            <div
+              aria-label="Darkmode on/off"
+              tabIndex={0}
+              onClick={()=> {
+                setDarkMode(!darkMode)}}
+              onKeyDown={()=> {
+                setDarkMode(!darkMode)}}
+            >
+              <FaPizzaSlice/>
+
+            </div>
           </li>
         </ul>
       </div>

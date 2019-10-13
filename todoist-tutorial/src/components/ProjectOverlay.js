@@ -17,9 +17,14 @@ export const ProjectOverlay = ({
             <li
               key={project.projectId}
               data-testid="project-overlay-action"
+              aria-label={`Selecting project ${project.name} to add task`}
+              tabIndex={0}
               onClick={() => {
                 setProject(project.projectId);
-                // setSelectedProject(project.projectId);
+                setShowProjectOverlay(false);
+              }}
+              onKeyDown={() => {
+                setProject(project.projectId);
                 setShowProjectOverlay(false);
               }}
             >

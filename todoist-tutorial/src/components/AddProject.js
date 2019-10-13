@@ -59,9 +59,12 @@ export const AddProject = ({ shouldShow = false }) => {
         }
         <span className="add-project__plus">+</span>
         <span
-          data-testid="show-project-overlay"
+          aria-label="Add project"
+          data-testid="add-project-action"
           className="add-project__text"
+          tabIndex={0}
           onClick={() => setShow(true)}
+          onKeyDown={() => setShow(true)}
         >
           Add Project
         </span>
