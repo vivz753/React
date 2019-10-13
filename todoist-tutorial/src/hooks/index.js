@@ -12,7 +12,6 @@ export const useTasks = selectedProject => {
 
   useEffect(() => {
     let userTasks = fbTasks
-      // .where('userId', '==', 'TrxBQ6dw2i93VzUVUtnY');
 
     // get the firebase tasks where project is the selected project
     // if selected project is today, get the tasks where date is today
@@ -57,7 +56,7 @@ export const useProjects = () => {
 
   useEffect(() => {
     fbProjects
-      .where('userId', '==', 'HcafYDT6NqkbwLPxqpsB')
+      // .where('userId', '==', 'HcafYDT6NqkbwLPxqpsB')
       .orderBy('projectId')
       .get()
       .then(snapshot => {
