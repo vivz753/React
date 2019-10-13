@@ -1,20 +1,30 @@
 import React from 'react';
 import {firebase} from '../firebase';
 
-export const Checkbox = ({id}) => {
+export const Checkbox = ({id, taskName, archived}) => {
   const archiveTask = () => {
     firebase
       .firestore()
       .collection('tasks')
       .doc(id)
       .update({
-        archived: true
+        archived: !archived
       });
   };
 
   return (
-    <div className="checkbox-holder" data-testid="checkbox-action" onClick={()=> archiveTask()}>
-      <span className="checkbox" />
+    <div 
+      role="button"
+      className="checkbox-holder"
+      data-testid="checkbox-action"
+      aria-label={`Mark task ${taskName} as done`}
+      tabIndex={0} 
+      onKeyDown={()=> archiveTask()}
+      onClick={()=> archiveTask()}
+    >
+      <span
+         className={archived ? "checkbox-checked" : "checkbox-unchecked"}
+      />  
     </div>
   )
 }
