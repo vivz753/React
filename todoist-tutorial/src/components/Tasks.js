@@ -52,6 +52,12 @@ export const Tasks = () => {
     })
   };
 
+  const deleteProject = (selectedProject) => {
+    firebase.firestore().collection('projects').doc(selectedProject).delete().then(()=> {
+      setProjects([...projects]);
+      setSelectedProject('INBOX');
+    })
+  }
 
   return (
     <div className="tasks" data-testid="tasks">
@@ -75,6 +81,19 @@ export const Tasks = () => {
                 </li>
             </ul>
           </div>
+          )
+        }
+        {!collatedTasksExist(selectedProject) && 
+          (
+            <div className="archived-icons">
+                <ul>
+                  <li
+                    onClick={() => deleteProject(selectedProject)}
+                    >
+                    <FaTrashAlt />
+                  </li>
+              </ul>
+            </div>
           )
         }
       </div>
