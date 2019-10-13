@@ -1,30 +1,41 @@
 import React, { useState } from 'react'; 
 import { collatedTasks } from '../constants';
 import { useSelectedProjectValue } from '../context';
-import { FaInbox, 
+import { 
+  FaInbox, 
   FaRegCalendarAlt, 
-  FaRegCalendar } from 'react-icons/fa';
+  FaRegCalendar,
+  FaArchive
+ } from 'react-icons/fa';
 
 export const CollatedProjects = (CollatedProjects) => {
   const [ active, setActive ] = useState('INBOX');
-  const { setSelectedProject } = useSelectedProjectValue();
+  const { selectedProject, setSelectedProject } = useSelectedProjectValue();
 
   return (
     <ul>
       {collatedTasks.map(task => {
         return (
-        <li 
+        <li
+        aria-label={`Show ${task.key} tasks`} 
         key={task.key}
         data-testid={task.key}
-        className={active === task.key ? 'active' : undefined}
+        className={selectedProject === task.key ? 'active' : undefined}
         onClick={() => {
-          setActive(task.key);
+          // setActive(task.key);
           setSelectedProject(task.key);
-        }}>
+        }}
+        onKeyDown={() => {
+          // setActive(task.key);
+          setSelectedProject(task.key);
+        }}
+        tabIndex={1}
+        >
           <span>
             {task.key === 'INBOX' && <FaInbox />}
             {task.key === 'TODAY' && <FaRegCalendar />}
             {task.key === 'NEXT_7' && <FaRegCalendarAlt />}
+            {task.key === 'ARCHIVED' && <FaArchive />}
           </span>
           <span>
             {task.name}

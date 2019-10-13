@@ -5,10 +5,12 @@ import { useTasks } from '../hooks';
 import { collatedTasks } from '../constants';
 import { getTitle, getCollatedTitle, collatedTasksExist } from '../helpers';
 import { useSelectedProjectValue, useProjectsValue } from '../context';
+import { FaTrashRestore, FaTrashAlt } from 'react-icons/fa';
+import {firebase} from '../firebase';
 
 export const Tasks = () => {
-  const { selectedProject } = useSelectedProjectValue();
-  const { projects } = useProjectsValue();
+  const { projects, setProjects } = useProjectsValue();
+  const { selectedProject, setSelectedProject } = useSelectedProjectValue();
   const { tasks, archivedTasks } = useTasks(selectedProject);
   
   let projectName = '';
@@ -26,13 +28,61 @@ export const Tasks = () => {
     document.title = `${projectName}: Todoist`
   })
 
+  let tasksToDisplay = []
+  selectedProject === 'ARCHIVED' ? tasksToDisplay = archivedTasks : tasksToDisplay = tasks;
+
+  const fbTasks = firebase.firestore().collection('tasks')
+  const fbTasksArchived = fbTasks.where('archived', '==', true)
+
+  const restoreAllArchivedTasks = () => {
+    fbTasksArchived.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        doc.ref.update({
+          archived: false
+        });
+      })
+    })
+  };
+
+  const deleteAllArchivedTasks = () => {
+    fbTasksArchived.get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        doc.ref.delete();
+      })
+    })
+  };
+
+
   return (
     <div className="tasks" data-testid="tasks">
-      <h2 data-testid="project-name">{projectName}</h2>
+      <div className="heading">
+        <h2 data-testid="project-name">
+        {projectName}
+        </h2>
+        {selectedProject === 'ARCHIVED' &&
+          (
+            <div className="archived-icons">
+              <ul>
+                <li
+                  onClick={() => restoreAllArchivedTasks()}
+                  >
+                  <FaTrashRestore /> 
+                </li>
+                <li
+                  onClick={() => deleteAllArchivedTasks()}
+                  >
+                  <FaTrashAlt />
+                </li>
+            </ul>
+          </div>
+          )
+        }
+      </div>
       <ul className="tasks__list">
-        {tasks.map(task=> (
+        {        
+          tasksToDisplay.map(task=> (
           <li key={`${task.id}`}>
-            <Checkbox id={task.id} />
+            <Checkbox id={task.id} taskName={task.taskName} archived={selectedProject==='ARCHIVED'}/>
             <span>{task.taskName}</span>
           </li>
         ))}
