@@ -1,25 +1,8 @@
-import React, { useState } from 'react';
-import { FaTrashAlt } from 'react-icons/fa';
+import React from 'react';
 import { useProjectsValue, useSelectedProjectValue } from '../context'
-import { firebase } from '../firebase';
 
 export const IndividualProject = ({project}) => {
-  // const [ active, setActive ] = useState();
-  const [ showConfirm, setShowConfirm ] = useState(false);
-  const { projects, setProjects } = useProjectsValue();
   const { selectedProject, setSelectedProject } = useSelectedProjectValue();
-
-  const deleteProject = docId => {
-    firebase
-      .firestore()
-      .collection('projects')
-      .doc(docId)
-      .delete()
-      .then(()=> {
-        setProjects([...projects]);
-        setSelectedProject('INBOX');
-      })
-  };
 
   return (
     <li
@@ -27,38 +10,28 @@ export const IndividualProject = ({project}) => {
       data-doc-id={project.docId}
       data-testid="project-action"
       className={
-        selectedProject === project.projectId
+        selectedProject === project.docId
         ? 'active sidebar__project'
         : 'sidebar__project'
       }
-      onClick={() => {
-        // setActive(project.projectId);
-        setSelectedProject(project.projectId);
-      }}
+
     >
-      <span className="sidebar__dot">•</span>
-      <span className="sidebar__project-name">{project.name}</span>
-      <span 
-        className="sidebar__project-delete"
-        data-testid="delete-project"
-        onClick={() => setShowConfirm(!showConfirm)}
+      <div
+        role="button"
+        aria-label={`Selecting project ${project.name}`}
+        tabIndex={2}
+        onClick={() => {
+          setSelectedProject(project.docId);
+
+        }}
+        onKeyDown={() => {
+          setSelectedProject(project.projectId);
+        }}
       >
-        <FaTrashAlt />
-        {showConfirm && (
-          <div className="project-delete-modal">
-            <div className="project-delete-modal__inner">
-              <p>Are you sure you want to delete this project?</p>
-              <button
-                type="button"
-                onClick={() => deleteProject(project.docId)}
-              >
-                Delete
-              </button>
-              <span onClick={() => setShowConfirm(!showConfirm)}>Cancel</span>
-            </div>
-          </div>
-        )}
-      </span>
+          
+        <span className="sidebar__dot">•</span>
+        <span className="sidebar__project-name">{project.name}</span>
+      </div>
     </li>
   )
 }
